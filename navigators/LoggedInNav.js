@@ -1,85 +1,37 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import {View, Image}  from "react-native";
-import TabIcon from "../components/nav/TabIcon";
-import SharedStackNav from "./SharedStackNav";
-import useMe from "../hooks/useMe";
+import { createStackNavigator } from "@react-navigation/stack";
+import TabsNav from "./TabsNav";
+import UploadNav from "./UploadNav";
+import UploadForm from "../screens/UploadForm";
+import { Ionicons } from "@expo/vector-icons";
+import { tintColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
-const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function LoggedInNav(){
-    const { data } = useMe();
     return (
-        <Tabs.Navigator
-            screenOptions={{
-                tabBarActiveTintColor:"white",
-                headerShown:false,
-                tabBarStyle:{
-                    borderTopColor: "rgba(255, 255, 255, 0.3)",
-                    backgroundColor:"black"
-                }
-            }}
-        >
-            <Tabs.Screen 
-                name="FeedScreen"
-                options={{
-                    tabBarIcon: ({focused, color, size}) => (
-                        <TabIcon iconName={"home"} color={color} focused={focused} />
-                    )
-                }}
+        <Stack.Navigator screenOptions={{presentation:"modal"}}>
+            <Stack.Screen 
+                options={{headerShown:false}} 
+                name="Tabs" 
+                component={TabsNav} /
             >
-                {()=> <SharedStackNav screenName="Feed" />}
-            </Tabs.Screen>
-            <Tabs.Screen 
-                name="SearchScreen"
-                options={{
-                    tabBarIcon: ({focused, color, size}) => (
-                        <TabIcon iconName={"search"} color={color} focused={focused} />
-                    )
-                }} 
+            <Stack.Screen 
+                options={{headerShown:false}} 
+                name="Upload" 
+                component={UploadNav} /
             >
-                {()=> <SharedStackNav screenName="Search" />}
-            </Tabs.Screen>
-            <Tabs.Screen 
-                name="CameraScreen" 
-                component={View}
+            <Stack.Screen 
                 options={{
-                    tabBarIcon: ({focused, color, size}) => (
-                        <TabIcon iconName={"camera"} color={color} focused={focused} />
-                    )
+                    headerBackTitleVisible:false,
+                    headerBackImage: ({tintColor}) => <Ionicons color={tintColor} name="close" size={28} />,
+                    title:"Upload",
+                    headerTintColor:"white",
+                    headerStyle:{backgroundColor:"black"}
                 }} 
+                name="UploadForm" 
+                component={UploadForm}
             />
-            <Tabs.Screen 
-                name="NotificationsScreen" 
-                options={{
-                    tabBarIcon: ({focused, color, size}) => (
-                        <TabIcon iconName={"heart"} color={color} focused={focused} />
-                    )
-                }} 
-            >
-                {()=> <SharedStackNav screenName="Notifications" />}
-            </Tabs.Screen>
-            <Tabs.Screen 
-                name="Me" 
-                options={{
-                    tabBarIcon: ({focused, color, size}) => 
-                    data?.me?.avatar ? (
-                        <Image 
-                            source={{uri: data.me.avatar}}
-                            style={{
-                                height: 20,
-                                width: 20,
-                                borderRadius:10,
-                                ...(focused && {borderColor: "white", borderWidth:1 })
-                            }}
-                        />
-                    ): (
-                        <TabIcon iconName={"person"} color={color} focused={focused} />
-                    ),
-                }} 
-            >
-                {()=> <SharedStackNav screenName="Me" />}
-            </Tabs.Screen>
-        </Tabs.Navigator>
-    )
+        </Stack.Navigator>
+    )  
 }

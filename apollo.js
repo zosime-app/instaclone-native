@@ -1,7 +1,9 @@
 import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from "@apollo/client";
+import {onError} from "@apollo/client/link/error";
 import {setContext} from "@apollo/client/link/context";
 import {offsetLimitPagination} from "@apollo/client/utilities"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createUploadLink } from "apollo-upload-client";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");
@@ -21,7 +23,11 @@ export const logUserOut = async() => {
 }
 
 const httpLink = createHttpLink({
-    uri:"http://localhost:4000/graphql"
+    uri:"https://zosime-gram-backend.herokuapp.com/graphql"
+})
+
+const uploadHttpLink = createUploadLink({
+    uri:"https://zosime-gram-backend.herokuapp.com/graphql"
 })
 
 const authLink = setContext((_, {headers})=> {
@@ -43,8 +49,17 @@ export const cache = new InMemoryCache({
     }
 })
 
+const onErrorLink = onError(({graphQLErrors, networkError})=>{
+    if(graphQLErrors){
+        console.log(`graphQLErrors`, graphQLErrors);
+    }
+    if(networkError){
+        console.log(`networkError`, networkError);
+    }
+});
+
 const client = new ApolloClient({
-    link : authLink.concat(httpLink),
+    link : authLink.concat(onErrorLink).concat(uploadHttpLink),
     cache,
 });
 export default client;

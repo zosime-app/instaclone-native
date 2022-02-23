@@ -78,7 +78,7 @@ export default function Search({navigation}){
                 })
             }
         >
-            <Image source={{uri: photo.file}} style={{width:width/numColumns, height:100}} />
+            <Image source={{uri: photo.file?photo.file:null}} style={{width:width/numColumns, height:100}} />
         </TouchableOpacity>
     );
     return (

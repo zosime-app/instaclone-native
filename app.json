@@ -17,12 +17,14 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "me.zosime.instaclone",
+      "buildNumber": "1.0.0",
       "userInterfaceStyle": "automatic",
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.yourappname",
-      "buildNumber": "1.0.0"
+      "supportsTablet": true
     },
     "android": {
+      "package": "me.zosime.instaclone",
+      "versionCode": 1,
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
